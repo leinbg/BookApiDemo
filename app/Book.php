@@ -12,4 +12,9 @@ use Illuminate\Database\Eloquent\Model;
 class Book extends Model
 {
     protected $fillable = ['title', 'author', 'content', 'rate'];
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
 }

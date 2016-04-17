@@ -13,6 +13,10 @@
 
 Route::group(['prefix' => 'api/v1'], function(){
     Route::resource('books', 'BooksController');
+    Route::resource('tags', 'TagsController', ['only' => [
+        'index', 'show'
+    ]]);
+    Route::get('books/{id}/tags', 'TagsController@index');
 });
 
 Route::get('/', function () {
