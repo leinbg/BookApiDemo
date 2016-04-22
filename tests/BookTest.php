@@ -12,6 +12,23 @@ class BookTest extends ApiTest
         $this->assertResponseOk();
     }
 
+    /** @test */
+    public function it_fetches_a_single_book()
+    {
+        $this->makeBooks();
+        $book = $this->getJson('/api/v1/books/1')->data;
+        $this->assertResponseOk();
+        $this->assertObjectHasAttributes($book, ['title', 'author']);
+        $this->assertObjectNotHasAttribute('content', $book);
+    }
+
+    /** @test */
+    public function it_gets_404_if_book_is_not_found()
+    {
+        $this->getJson('/api/v1/books/aaa');
+        $this->assertResponseStatus(404);
+    }
+
     /**
      * @param array $bookFields
      */
@@ -30,10 +47,10 @@ class BookTest extends ApiTest
     /**
      * @param $url
      *
-     * @return string
+     * @return object
      */
     protected function getJson($url)
     {
-        return json_encode($this->call('GET', $url)->getContent());
+        return json_decode($this->call('GET', $url)->getContent());
     }
 }

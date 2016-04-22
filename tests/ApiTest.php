@@ -26,4 +26,20 @@ class ApiTest extends TestCase
         parent::__construct();
         $this->fake = Faker::create();
     }
+
+    /**
+     * assert helper
+     */
+    protected function assertObjectHasAttributes()
+    {
+        $args = func_get_args();
+        if (!$args || count($args) < 2) {
+            return;
+        }
+
+        $object = array_shift($args);
+        foreach ($args[0] as $attribute) {
+            $this->assertObjecthasAttribute($attribute, $object);
+        }
+    }
 }
