@@ -36,21 +36,13 @@ class BooksController extends ApiController
      */
     public function index()
     {
-        $books = Book::all();
+        $limit = Input::get('limit') ?: 3;
+        $booksObj = Book::paginate($limit);
+        $books = $booksObj->toArray();
 
-        $books = $this->booksTransformer->transformCollection($books->toArray());
-
-        return $this->responseSuccess($books);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return $this->responseSuccess([
+            'data' => $this->booksTransformer->transformCollection($books['data'])
+        ]);
     }
 
     /**
@@ -90,40 +82,8 @@ class BooksController extends ApiController
             return $this->responseError('book is not found');
         }
 
-        return $this->responseSuccess($book);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $this->responseSuccess([
+            'data' => $book
+        ]);
     }
 }

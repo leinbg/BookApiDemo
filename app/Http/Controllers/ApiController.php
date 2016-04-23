@@ -22,7 +22,6 @@ class ApiController extends Controller
      */
     public function responseSuccess($data)
     {
-        $data = ['data' => $data];
         return $this->setStatus(200)->response($data);
     }
 
@@ -73,7 +72,9 @@ class ApiController extends Controller
     }
 
     /**
-     * @param mixed $status status
+     * @param $status
+     *
+     * @return $this
      */
     public function setStatus($status)
     {

@@ -21,15 +21,17 @@ class TagsController extends ApiController
     /**
      * Display a listing of the resource.
      *
+     * @param string $bookId
+     *
      * @return \Illuminate\Http\Response
      */
     public function index($bookId = null)
     {
         $tags = $this->getTags($bookId);
 
-        $tags = $this->tagsTransformer->transformCollection($tags->toArray());
-
-        return $this->responseSuccess($tags);
+        return $this->responseSuccess([
+            'data' => $this->tagsTransformer->transformCollection($tags->toArray())
+        ]);
     }
 
     /**
@@ -48,7 +50,9 @@ class TagsController extends ApiController
             return $this->responseError('tag is not found');
         }
 
-        return $this->responseSuccess($tag);
+        return $this->responseSuccess([
+            'data' => $tag
+        ]);
     }
 
     /**

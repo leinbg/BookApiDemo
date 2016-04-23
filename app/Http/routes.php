@@ -12,7 +12,9 @@
 */
 
 Route::group(['prefix' => 'api/v1'], function(){
-    Route::resource('books', 'BooksController');
+    Route::resource('books', 'BooksController', ['only' => [
+        'index', 'show', 'store'
+    ]]);
     Route::resource('tags', 'TagsController', ['only' => [
         'index', 'show'
     ]]);
