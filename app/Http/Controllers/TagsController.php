@@ -8,6 +8,7 @@ use App\Tag;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Input;
 
 /**
  * Class TagsController
@@ -16,6 +17,10 @@ use App\Http\Requests;
  */
 class TagsController extends ApiController
 {
+
+    /**
+     * @var TagsTransformer
+     */
     protected $tagsTransformer;
 
     /**
@@ -37,10 +42,11 @@ class TagsController extends ApiController
      */
     public function index($bookId = null)
     {
-        $tags = $this->getTags($bookId);
+        $limit = Input::get('limit') ?: 3;
+        $tags = $this->getTags($bookId, $limit);
 
-        return $this->responseSuccess([
-            'data' => $this->tagsTransformer->transformCollection($tags->toArray())
+        return $this->responseSuccessWithPagination($tags, [
+            'data' => $this->tagsTransformer->transformCollection($tags->all())
         ]);
     }
 
@@ -67,11 +73,12 @@ class TagsController extends ApiController
 
     /**
      * @param $bookId
+     * @param $limit
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    protected function getTags($bookId)
+    protected function getTags($bookId, $limit)
     {
-        return $bookId ? Book::findOrFail($bookId)->tags : Tag::all();
+        return $bookId ? Book::findOrFail($bookId)->tags()->paginate($limit) : Tag::paginate($limit);
     }
 }
