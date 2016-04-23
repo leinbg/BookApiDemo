@@ -9,10 +9,20 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+/**
+ * Class TagsController
+ *
+ * @package App\Http\Controllers
+ */
 class TagsController extends ApiController
 {
     protected $tagsTransformer;
-    
+
+    /**
+     * TagsController constructor.
+     *
+     * @param TagsTransformer $transformer
+     */
     public function __construct(TagsTransformer $transformer)
     {
         $this->tagsTransformer = $transformer;
@@ -62,8 +72,6 @@ class TagsController extends ApiController
      */
     protected function getTags($bookId)
     {
-        $tags = $bookId ? Book::findOrFail($bookId)->tags : Tag::all();
-
-        return $tags;
+        return $bookId ? Book::findOrFail($bookId)->tags : Tag::all();
     }
 }

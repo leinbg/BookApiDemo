@@ -16,6 +16,26 @@ class ApiController extends Controller
     protected $status = 200;
 
     /**
+     * @param $paginator
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function responseSuccessWithPagination($paginator, $data)
+    {
+        $data = array_merge($data, [
+            'paginator' => [
+                'total_count'  => $paginator->total(),
+                'total_pages'  => ceil($paginator->total() / $paginator->perPage()),
+                'current_page' => $paginator->currentPage(),
+                'limit'        => (int) $paginator->perPage(),
+            ]
+        ]);
+
+        return $this->responseSuccess($data);
+    }
+
+    /**
      * @param array $data
      *
      * @return mixed
@@ -24,8 +44,6 @@ class ApiController extends Controller
     {
         return $this->setStatus(200)->response($data);
     }
-
-
 
     /**
      * @param string $message

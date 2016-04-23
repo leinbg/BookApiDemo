@@ -37,11 +37,10 @@ class BooksController extends ApiController
     public function index()
     {
         $limit = Input::get('limit') ?: 3;
-        $booksObj = Book::paginate($limit);
-        $books = $booksObj->toArray();
+        $books = Book::paginate($limit);
 
-        return $this->responseSuccess([
-            'data' => $this->booksTransformer->transformCollection($books['data'])
+        return $this->responseSuccessWithPagination($books, [
+            'data' => $this->booksTransformer->transformCollection($books->all()),
         ]);
     }
 
