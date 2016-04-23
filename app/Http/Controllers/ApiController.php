@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Pagination\Paginator;
+
 /**
  * Class ApiController
  *
@@ -16,12 +18,12 @@ class ApiController extends Controller
     protected $status = 200;
 
     /**
-     * @param $paginator
+     * @param Paginator $paginator
      * @param $data
      *
      * @return mixed
      */
-    public function responseSuccessWithPagination($paginator, $data)
+    public function responseSuccessWithPagination(Paginator $paginator, $data)
     {
         $data = array_merge($data, [
             'paginator' => [
