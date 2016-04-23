@@ -28,31 +28,14 @@ abstract class ApiTest extends TestCase
     }
 
     /**
-     * @param       $type
-     * @param array $fields
-     */
-    protected function make($type, array $fields = [])
-    {
-        $records = array_merge($this->getStub(), $fields);
-        $type::create($records);
-    }
-
-    /**
-     * by default will throw an exception
-     */
-    protected function getStub()
-    {
-        throw new BadMethodCallException('create your own getstub function');
-    }
-
-    /**
-     * @param $url
+     * @param string $url
+     * @param string $method
      *
      * @return object
      */
-    protected function getJson($url)
+    protected function getJson($url, $method = 'GET')
     {
-        return json_decode($this->call('GET', $url)->getContent());
+        return json_decode($this->call($method, $url)->getContent());
     }
 
     /**
@@ -67,7 +50,7 @@ abstract class ApiTest extends TestCase
 
         $object = array_shift($args);
         foreach ($args[0] as $attribute) {
-            $this->assertObjecthasAttribute($attribute, $object);
+            $this->assertObjectHasAttribute($attribute, $object);
         }
     }
 }

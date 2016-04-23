@@ -4,6 +4,8 @@
  */
 class BookTest extends ApiTest
 {
+    use \tests\helpers\Factory;
+
     /** @test */
     public function it_fetches_books()
     {
