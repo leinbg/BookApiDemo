@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Book;
+use App\Helpers\Filter\BookFilters;
 use App\Helpers\Transformer\BooksTransformer;
 use Illuminate\Http\Request;
 
@@ -32,33 +33,15 @@ class BooksController extends ApiController
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
+     * @param BookFilters $filters
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(BookFilters $filters)
     {
         $limit = Input::get('limit') ?: 3;
 
-        $books = (new Book)->newQuery();
-
-        if ($request->exists('popular')) {
-            $books->orderby('rate', 'desc');
-        }
-
-        if ($request->has('lang')) {
-            $books->where('language', $request->lang);
-        }
-
-        if ($request->has('maxprice')) {
-            $books->where('price', '<', $request->maxprice);
-        }
-
-        if ($request->has('minprice')) {
-            $books->where('price', '>', $request->minprice);
-        }
-
-        $books = $books->paginate($limit);
+        $books = Book::filter($filters)->paginate($limit);
 
         return $this->responseSuccessWithPagination($books, [
             'data' => $this->booksTransformer->transformCollection($books->all()),
