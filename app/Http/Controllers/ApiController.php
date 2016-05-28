@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Class ApiController
@@ -18,12 +18,12 @@ class ApiController extends Controller
     protected $status = 200;
 
     /**
-     * @param Paginator $paginator
+     * @param LengthAwarePaginator $paginator
      * @param $data
      *
      * @return mixed
      */
-    public function responseSuccessWithPagination(Paginator $paginator, $data)
+    public function responseSuccessWithPagination(LengthAwarePaginator $paginator, $data)
     {
         $data = array_merge($data, [
             'paginator' => [
