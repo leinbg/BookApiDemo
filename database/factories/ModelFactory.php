@@ -25,6 +25,8 @@ $factory->define(App\Book::class, function (Faker\Generator $faker) {
         'title' => $faker->sentence,
         'author' => $faker->name,
         'rate' => $faker->numberBetween(1, 10),
+        'price' => $faker->numberBetween(20, 200),
+        'language' => $faker->randomElement(['chinese', 'german', 'english']),
         'content' => $faker->paragraph(),
     ];
 });

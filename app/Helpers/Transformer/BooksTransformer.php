@@ -25,6 +25,8 @@ class BooksTransformer extends Transformer
             'title' => $book['title'],
             'author' => $book['author'],
             'rate' => $book['rate'],
+            'lang' => $book['language'],
+            'price' => $book['price'],
         ];
     }
 }
