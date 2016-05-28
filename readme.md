@@ -3,7 +3,7 @@ About me
 - pivot table, migration, factory, seeding, routes, mvc
 - subject transformers suited for api
 - limitation && pagination
-- query object
+- filter object with query scope 
 
 How to use
 -----------
