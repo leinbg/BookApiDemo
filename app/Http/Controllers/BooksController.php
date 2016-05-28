@@ -32,12 +32,33 @@ class BooksController extends ApiController
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $limit = Input::get('limit') ?: 3;
-        $books = Book::paginate($limit);
+
+        $books = (new Book)->newQuery();
+
+        if ($request->exists('popular')) {
+            $books->orderby('rate', 'desc');
+        }
+
+        if ($request->has('lang')) {
+            $books->where('language', $request->lang);
+        }
+
+        if ($request->has('maxprice')) {
+            $books->where('price', '<', $request->maxprice);
+        }
+
+        if ($request->has('minprice')) {
+            $books->where('price', '>', $request->minprice);
+        }
+
+        $books = $books->paginate($limit);
 
         return $this->responseSuccessWithPagination($books, [
             'data' => $this->booksTransformer->transformCollection($books->all()),
