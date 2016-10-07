@@ -1,17 +1,29 @@
 About me
 ----------
-- pivot table, migration, factory, seeding, routes, mvc
-- subject transformers suited for api
+- rest Api
+- subject transformers
 - limitation && pagination
-- filter object with query scope 
+- filter subject with query object 
 
-How to use
+API Doc
 -----------
-- config db
-- api call on specific subject: api/v1/books
-- api call on nested resources: api/v1/books/1/tags
+- GET
+    - get books (default 3)
+        - api/v1/books
+    - get 5 books
+        - api/v1/books?limit=5
+    - get all tags associate with book
+        - api/v1/books/1/tags
+    - get books sorted by rate
+        - api/v1/books?popular
+    - get books cost less than 100
+        - api/v1/books?maxPrice=100
+    - get books cost more than 100
+        - api/v1/books?minPrice=100
+    - get english books
+        - api/v1/books?lang=english
 
 todo
 ------
-- tests for api
+- tests
 - post, update, delete
