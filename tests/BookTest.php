@@ -43,8 +43,8 @@ class BookTest extends ApiTest
     /** @test */
     public function it_fetches_books_cheaper_than_100()
     {
-        $books = $this->getJson('/api/v1/books?maxPrice=100');
-        foreach ($books->data as $book) {
+        $books = $this->getJson('/api/v1/books?maxPrice=100')->data;
+        foreach ($books as $book) {
             $this->assertLessThan(100, $book->price);
         }
     }
@@ -52,8 +52,8 @@ class BookTest extends ApiTest
     /** @test */
     public function it_fetches_books_more_expensive_than_150()
     {
-        $books = $this->getJson('/api/v1/books?minPrice=150');
-        foreach ($books->data as $book) {
+        $books = $this->getJson('/api/v1/books?minPrice=150')->data;
+        foreach ($books as $book) {
             $this->assertGreaterThan(150, $book->price);
         }
     }
@@ -61,8 +61,8 @@ class BookTest extends ApiTest
     /** @test */
     public function it_fetches_english_books()
     {
-        $books = $this->getJson('/api/v1/books?lang=english');
-        foreach ($books->data as $book) {
+        $books = $this->getJson('/api/v1/books?lang=english')->data;
+        foreach ($books as $book) {
             $this->assertEquals('english', $book->lang);
         }
     }
@@ -70,10 +70,10 @@ class BookTest extends ApiTest
     /** @test */
     public function it_fetch_books_sort_by_rate_desc()
     {
-        $books = $this->getJson('/api/v1/books?popular');
-        $book1 = $books->data[0];
-        $book2 = $books->data[1];
-        $book3 = $books->data[2];
+        $books = $this->getJson('/api/v1/books?popular')->data;
+        $book1 = $books[0];
+        $book2 = $books[1];
+        $book3 = $books[2];
 
         // rate1 >= rate2 >= rate3
         $this->assertGreaterThanOrEqual($book2->rate, $book1->rate);
@@ -83,10 +83,10 @@ class BookTest extends ApiTest
     /** @test */
     public function it_fetch_books_sort_by_rate_asc()
     {
-        $books = $this->getJson('/api/v1/books?popular=asc');
-        $book1 = $books->data[0];
-        $book2 = $books->data[1];
-        $book3 = $books->data[2];
+        $books = $this->getJson('/api/v1/books?popular=asc')->data;
+        $book1 = $books[0];
+        $book2 = $books[1];
+        $book3 = $books[2];
 
         // rate1 <= rate2 <= rate3
         $this->assertLessThanOrEqual($book2->rate, $book1->rate);
