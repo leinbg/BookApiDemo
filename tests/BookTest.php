@@ -25,6 +25,24 @@ class BookTest extends ApiTest
     }
 
     /** @test */
+    public function it_fetches_books_cheaper_than_100()
+    {
+        $books = $this->getJson('/api/v1/books?maxPrice=100');
+        foreach ($books->data as $book) {
+            $this->assertLessThan(100, $book->price);
+        }
+    }
+
+    /** @test */
+    public function it_fetches_books_more_expensive_than_150()
+    {
+        $books = $this->getJson('/api/v1/books?minPrice=150');
+        foreach ($books->data as $book) {
+            $this->assertGreaterThan(150, $book->price);
+        }
+    }
+
+    /** @test */
     public function it_gets_404_if_book_is_not_found()
     {
         $this->getJson('/api/v1/books/aaa');
