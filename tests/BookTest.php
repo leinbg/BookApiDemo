@@ -51,6 +51,15 @@ class BookTest extends ApiTest
     }
 
     /** @test */
+    public function it_fetches_english_books()
+    {
+        $books = $this->getJson('/api/v1/books?lang=english');
+        foreach ($books->data as $book) {
+            $this->assertEquals('english', $book->lang);
+        }
+    }
+
+    /** @test */
     public function it_gets_404_if_book_is_not_found()
     {
         $this->getJson('/api/v1/books/aaa');
