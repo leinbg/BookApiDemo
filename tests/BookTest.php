@@ -59,6 +59,8 @@ class BookTest extends ApiTest
             'content' => $this->fake->paragraph,
             'author' => $this->fake->name,
             'rate' => $this->fake->randomDigitNotNull,
+            'language' => $this->fake->randomElement(['english', 'german', 'chinese']),
+            'price' => $this->fake->randomFloat(2, 0, 300),
         ];
     }
 }
