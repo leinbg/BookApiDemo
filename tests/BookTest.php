@@ -1,4 +1,7 @@
 <?php
+
+use App\Book;
+
 /**
  * Class BookTest
  */
@@ -6,10 +9,16 @@ class BookTest extends ApiTest
 {
     use \tests\helpers\Factory;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->make(Book::class, 3);
+    }
+
     /** @test */
     public function it_fetches_books()
     {
-        $this->make(\App\Book::class);
         $this->getJson('/api/v1/books');
         $this->assertResponseOk();
     }
@@ -17,11 +26,71 @@ class BookTest extends ApiTest
     /** @test */
     public function it_fetches_a_single_book()
     {
-        $this->make(\App\Book::class);
         $book = $this->getJson('/api/v1/books/1')->data;
         $this->assertResponseOk();
-        $this->assertObjectHasAttributes($book, ['title', 'author']);
+        $this->assertObjectHasAttributes($book, ['title', 'author', 'price', 'lang']);
         $this->assertObjectNotHasAttribute('content', $book);
+    }
+
+    /** @test */
+    public function it_fetches_5_book()
+    {
+        $this->make(Book::class, 2);
+        $books = $this->getJson('/api/v1/books?limit=5')->data;
+        $this->assertCount(5, $books);
+    }
+
+    /** @test */
+    public function it_fetches_books_cheaper_than_100()
+    {
+        $books = $this->getJson('/api/v1/books?maxPrice=100')->data;
+        foreach ($books as $book) {
+            $this->assertLessThan(100, $book->price);
+        }
+    }
+
+    /** @test */
+    public function it_fetches_books_more_expensive_than_150()
+    {
+        $books = $this->getJson('/api/v1/books?minPrice=150')->data;
+        foreach ($books as $book) {
+            $this->assertGreaterThan(150, $book->price);
+        }
+    }
+
+    /** @test */
+    public function it_fetches_english_books()
+    {
+        $books = $this->getJson('/api/v1/books?lang=english')->data;
+        foreach ($books as $book) {
+            $this->assertEquals('english', $book->lang);
+        }
+    }
+
+    /** @test */
+    public function it_fetch_books_sort_by_rate_desc()
+    {
+        $books = $this->getJson('/api/v1/books?popular')->data;
+        $book1 = $books[0];
+        $book2 = $books[1];
+        $book3 = $books[2];
+
+        // rate1 >= rate2 >= rate3
+        $this->assertGreaterThanOrEqual($book2->rate, $book1->rate);
+        $this->assertGreaterThanOrEqual($book3->rate, $book2->rate);
+    }
+
+    /** @test */
+    public function it_fetch_books_sort_by_rate_asc()
+    {
+        $books = $this->getJson('/api/v1/books?popular=asc')->data;
+        $book1 = $books[0];
+        $book2 = $books[1];
+        $book3 = $books[2];
+
+        // rate1 <= rate2 <= rate3
+        $this->assertLessThanOrEqual($book2->rate, $book1->rate);
+        $this->assertLessThanOrEqual($book3->rate, $book2->rate);
     }
 
     /** @test */
@@ -41,6 +110,8 @@ class BookTest extends ApiTest
             'content' => $this->fake->paragraph,
             'author' => $this->fake->name,
             'rate' => $this->fake->randomDigitNotNull,
+            'language' => $this->fake->randomElement(['english', 'german', 'chinese']),
+            'price' => $this->fake->randomFloat(2, 0, 300),
         ];
     }
 }

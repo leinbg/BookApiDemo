@@ -10,16 +10,20 @@ trait Factory
 {
     /**
      * @param       $type
+     * @param int   $copies
      * @param array $fields
      */
-    public function make($type, array $fields = [])
+    public function make($type, $copies = 0, array $fields = [])
     {
         $stub = $this->getStub();
         if ($stub && is_array($stub)) {
             $fields = array_merge($stub, $fields);
         }
 
-        $type::create($fields);
+        do {
+            $type::create($fields);
+            $copies--;
+        } while ($copies > 0);
     }
 
     /**

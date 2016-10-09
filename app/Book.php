@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Book extends Model
 {
-    protected $fillable = ['title', 'author', 'content', 'rate'];
+    protected $fillable = ['title', 'author', 'content', 'rate', 'language', 'price'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
