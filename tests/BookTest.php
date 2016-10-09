@@ -1,4 +1,7 @@
 <?php
+
+use App\Book;
+
 /**
  * Class BookTest
  */
@@ -6,10 +9,16 @@ class BookTest extends ApiTest
 {
     use \tests\helpers\Factory;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->make(Book::class, 3);
+    }
+
     /** @test */
     public function it_fetches_books()
     {
-        $this->make(\App\Book::class);
         $this->getJson('/api/v1/books');
         $this->assertResponseOk();
     }
@@ -17,7 +26,6 @@ class BookTest extends ApiTest
     /** @test */
     public function it_fetches_a_single_book()
     {
-        $this->make(\App\Book::class);
         $book = $this->getJson('/api/v1/books/1')->data;
         $this->assertResponseOk();
         $this->assertObjectHasAttributes($book, ['title', 'author']);
