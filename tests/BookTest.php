@@ -28,7 +28,7 @@ class BookTest extends ApiTest
     {
         $book = $this->getJson('/api/v1/books/1')->data;
         $this->assertResponseOk();
-        $this->assertObjectHasAttributes($book, ['title', 'author']);
+        $this->assertObjectHasAttributes($book, ['title', 'author', 'price', 'lang']);
         $this->assertObjectNotHasAttribute('content', $book);
     }
 
