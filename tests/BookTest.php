@@ -60,6 +60,32 @@ class BookTest extends ApiTest
     }
 
     /** @test */
+    public function it_fetch_books_sort_by_rate_desc()
+    {
+        $books = $this->getJson('/api/v1/books?popular');
+        $book1 = $books->data[0];
+        $book2 = $books->data[1];
+        $book3 = $books->data[2];
+
+        // rate1 >= rate2 >= rate3
+        $this->assertGreaterThanOrEqual($book2->rate, $book1->rate);
+        $this->assertGreaterThanOrEqual($book3->rate, $book2->rate);
+    }
+
+    /** @test */
+    public function it_fetch_books_sort_by_rate_asc()
+    {
+        $books = $this->getJson('/api/v1/books?popular=asc');
+        $book1 = $books->data[0];
+        $book2 = $books->data[1];
+        $book3 = $books->data[2];
+
+        // rate1 <= rate2 <= rate3
+        $this->assertLessThanOrEqual($book2->rate, $book1->rate);
+        $this->assertLessThanOrEqual($book3->rate, $book2->rate);
+    }
+
+    /** @test */
     public function it_gets_404_if_book_is_not_found()
     {
         $this->getJson('/api/v1/books/aaa');
