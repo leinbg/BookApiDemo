@@ -26,4 +26,6 @@ API Doc
 todo
 ------
 - tests
+    - done helpers
+    - ? controllers
 - post, update, delete
