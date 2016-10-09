@@ -33,6 +33,14 @@ class BookTest extends ApiTest
     }
 
     /** @test */
+    public function it_fetches_5_book()
+    {
+        $this->make(Book::class, 2);
+        $books = $this->getJson('/api/v1/books?limit=5')->data;
+        $this->assertCount(5, $books);
+    }
+
+    /** @test */
     public function it_fetches_books_cheaper_than_100()
     {
         $books = $this->getJson('/api/v1/books?maxPrice=100');
